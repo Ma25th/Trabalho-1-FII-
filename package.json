@@ -1,0 +1,14 @@
+{
+  "name": "prog-fii-1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm start"
+  },
+  "author": "Matheus",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
