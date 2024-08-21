@@ -6,10 +6,15 @@ export default class FuncionarioCtrl {
         resposta.type('application/json');
         if (requisicao.method === 'POST' && requisicao.is('application/json')) {
             const dados = requisicao.body;
+    
+
             const nome = dados.nome;
             const salario = dados.salario;
             const departamentoId = dados.departamentoId;
-
+    
+           
+    
+            
             if (nome && salario > 0 && departamentoId) {
                 const funcionario = new Funcionario(0, nome, salario, departamentoId);
                 funcionario.gravar().then(() => {
@@ -19,16 +24,17 @@ export default class FuncionarioCtrl {
                         "mensagem": "Funcionário incluído com sucesso!"
                     });
                 })
-                    .catch((erro) => {
-                        resposta.status(500).json({
-                            "status": false,
-                            "mensagem": "Erro ao registrar o funcionário: " + erro.message
-                        });
+                .catch((erro) => {
+                    resposta.status(500).json({
+                        "status": false,
+                        "mensagem": "Erro ao registrar o funcionário: " + erro.message
                     });
+                });
             } else {
+    
                 resposta.status(400).json({
                     "status": false,
-                    "mensagem": "Por favor, informe os dados do funcionário conforme a documentação da API!"
+                    "mensagem": "Por favor, informe todos os dados do funcionário conforme a documentação da API!"
                 });
             }
         } else {
@@ -38,6 +44,7 @@ export default class FuncionarioCtrl {
             });
         }
     }
+    
 
     atualizar(requisicao, resposta) {
         resposta.type('application/json');

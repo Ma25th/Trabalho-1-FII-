@@ -6,6 +6,7 @@ CREATE TABLE departamentos(
     dep_codigo INT NOT NULL AUTO_INCREMENT,
     dep_nome VARCHAR(100) NOT NULL,
     dep_localizacao VARCHAR(100) NOT NULL,
+    dep_funcao VARCHAR(255) NOT NULL,  
     CONSTRAINT pk_departamentos PRIMARY KEY(dep_codigo)
 );
 

@@ -1,15 +1,15 @@
 import { Router } from "express";
-import FuncionarioCtrl from "../Controller/funcionarioCtrl.js";
+import FuncionarioCtrl from "../Controller/funcionarioCtrl.js"; 
 
-const funcCtrl = new FuncionarioCtrl();
+const funcionarioCtrl = new FuncionarioCtrl();
 const rotaFuncionario = new Router();
 
 rotaFuncionario
-.get('/', funcCtrl.consultar)
-.get('/:termo', funcCtrl.consultar)
-.post('/', funcCtrl.gravar)
-.patch('/', funcCtrl.atualizar)
-.put('/', funcCtrl.atualizar)
-.delete('/', funcCtrl.excluir);
+    .get('/', funcionarioCtrl.consultar)
+    .get('/:termo', funcionarioCtrl.consultar)
+    .post('/', funcionarioCtrl.gravar)
+    .patch('/', funcionarioCtrl.atualizar)
+    .put('/', funcionarioCtrl.atualizar)
+    .delete('/', funcionarioCtrl.excluir);
 
 export default rotaFuncionario;

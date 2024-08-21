@@ -1,15 +1,16 @@
 import DepartamentoDAO from "../Persistensia/departamentoDAO.js";
 
 export default class Departamento {
-    
     #codigo;
     #nome;
     #localizacao;
+    #funcao;
 
-    constructor(codigo = 0, nome = '', localizacao = '') {
+    constructor(codigo = 0, nome = '', localizacao = '', funcao = '') {
         this.#codigo = codigo;
         this.#nome = nome;
         this.#localizacao = localizacao;
+        this.#funcao = funcao;
     }
 
     
@@ -37,13 +38,21 @@ export default class Departamento {
         this.#localizacao = novaLocalizacao;
     }
 
-    
+    get funcao() {
+        return this.#funcao;
+    }
+
+    set funcao(novaFuncao) {
+        this.#funcao = novaFuncao;
+    }
+
     toJSON() {
         return {
             codigo: this.#codigo,
             nome: this.#nome,
-            localizacao: this.#localizacao
-        }
+            localizacao: this.#localizacao,
+            funcao: this.#funcao
+        };
     }
 
     

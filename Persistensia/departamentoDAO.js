@@ -15,6 +15,7 @@ export default class DepartamentoDAO {
                     dep_codigo INT NOT NULL AUTO_INCREMENT,
                     dep_nome VARCHAR(100) NOT NULL,
                     dep_localizacao VARCHAR(100) NOT NULL,
+                    dep_funcao VARCHAR(255) NOT NULL,  
                     CONSTRAINT pk_departamentos PRIMARY KEY(dep_codigo)
                 );
             `;
@@ -27,19 +28,26 @@ export default class DepartamentoDAO {
 
     async gravar(departamento) {
         if (departamento instanceof Departamento) {
-            const sql = "INSERT INTO departamentos(dep_nome, dep_localizacao) VALUES(?, ?)"; 
-            const parametros = [departamento.nome, departamento.localizacao];
+            const sql = "INSERT INTO departamentos(dep_nome, dep_localizacao, dep_funcao) VALUES(?, ?, ?)"; 
+            const parametros = [departamento.nome, departamento.localizacao, departamento.funcao];
+    
+    
             const conexao = await conectar(); 
-            const retorno = await conexao.execute(sql, parametros); 
-            departamento.codigo = retorno[0].insertId;
-            global.poolConexoes.releaseConnection(conexao);
+            try {
+                const retorno = await conexao.execute(sql, parametros); 
+                departamento.codigo = retorno[0].insertId;
+            } catch (erro) {
+                console.log("Erro na execução do SQL:", erro.message);
+            } finally {
+                global.poolConexoes.releaseConnection(conexao);
+            }
         }
     }
-
+    
     async atualizar(departamento) {
         if (departamento instanceof Departamento) {
-            const sql = "UPDATE departamentos SET dep_nome = ?, dep_localizacao = ? WHERE dep_codigo = ?"; 
-            const parametros = [departamento.nome, departamento.localizacao, departamento.codigo];
+            const sql = "UPDATE departamentos SET dep_nome = ?, dep_localizacao = ?, dep_funcao = ? WHERE dep_codigo = ?"; 
+            const parametros = [departamento.nome, departamento.localizacao, departamento.funcao, departamento.codigo];
             const conexao = await conectar(); 
             await conexao.execute(sql, parametros); 
             global.poolConexoes.releaseConnection(conexao);
@@ -73,7 +81,7 @@ export default class DepartamentoDAO {
         const [registros, campos] = await conexao.execute(sql, parametros);
         let listaDepartamentos = [];
         for (const registro of registros) {
-            const departamento = new Departamento(registro.dep_codigo, registro.dep_nome, registro.dep_localizacao);
+            const departamento = new Departamento(registro.dep_codigo, registro.dep_nome, registro.dep_localizacao, registro.dep_funcao);
             listaDepartamentos.push(departamento);
         }
         return listaDepartamentos;
