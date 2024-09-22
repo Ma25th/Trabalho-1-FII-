@@ -4,7 +4,7 @@ import rotaDepartamento from './Routes/rotadepartamento.js';
 import rotaFuncionario from './Routes/rotafuncionario.js';
 
 const host = '0.0.0.0';
-const porta = 3000;
+const porta = 3001;
 
 const app = express();
 

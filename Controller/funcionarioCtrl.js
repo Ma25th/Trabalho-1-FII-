@@ -50,11 +50,11 @@ export default class FuncionarioCtrl {
         resposta.type('application/json');
         if ((requisicao.method === 'PUT' || requisicao.method === 'PATCH') && requisicao.is('application/json')) {
             const dados = requisicao.body;
-            const codigo = dados.codigo;
+            const codigo = requisicao.params.codigo; 
             const nome = dados.nome;
             const salario = dados.salario;
             const departamentoId = dados.departamentoId;
-
+    
             if (codigo && nome && salario > 0 && departamentoId) {
                 const funcionario = new Funcionario(codigo, nome, salario, departamentoId);
                 funcionario.atualizar().then(() => {
@@ -72,7 +72,7 @@ export default class FuncionarioCtrl {
             } else {
                 resposta.status(400).json({
                     "status": false,
-                    "mensagem": "Por favor, informe todos os dados do funcionário conforme a documentação da API!"
+                    "mensagem": "Por favor, informe todos os dados do funcionário corretamente!"
                 });
             }
         } else {
@@ -85,36 +85,33 @@ export default class FuncionarioCtrl {
 
     excluir(requisicao, resposta) {
         resposta.type('application/json');
-        if (requisicao.method === 'DELETE' && requisicao.is('application/json')) {
-            const dados = requisicao.body;
-            const codigo = dados.codigo;
-            if (codigo) {
-                const funcionario = new Funcionario(codigo);
-                funcionario.excluir().then(() => {
-                    resposta.status(200).json({
-                        "status": true,
-                        "mensagem": "Funcionário excluído com sucesso!"
-                    });
-                })
-                    .catch((erro) => {
-                        resposta.status(500).json({
-                            "status": false,
-                            "mensagem": "Erro ao excluir o funcionário: " + erro.message
-                        });
-                    });
-            } else {
-                resposta.status(400).json({
-                    "status": false,
-                    "mensagem": "Por favor, informe o código do funcionário!"
+
+        
+        const codigo = requisicao.params.codigo;
+
+        if (codigo) {
+            const funcionario = new Funcionario(codigo);
+            funcionario.excluir().then(() => {
+                resposta.status(200).json({
+                    "status": true,
+                    "mensagem": "Funcionário excluído com sucesso!"
                 });
-            }
+            })
+            .catch((erro) => {
+                resposta.status(500).json({
+                    "status": false,
+                    "mensagem": "Erro ao excluir o funcionário: " + erro.message
+                });
+            });
         } else {
             resposta.status(400).json({
                 "status": false,
-                "mensagem": "Por favor, utilize o método DELETE para excluir um funcionário!"
+                "mensagem": "Por favor, informe o código do funcionário!"
             });
         }
     }
+
+
 
     consultar(requisicao, resposta) {
         resposta.type('application/json');

@@ -79,37 +79,27 @@ export default class DepartamentoCtrl {
     
     excluir(requisicao, resposta) {
         resposta.type('application/json');
-        if (requisicao.method === 'DELETE' && requisicao.is('application/json')) {
-            const dados = requisicao.body;
-            const codigo = dados.codigo;
-
-            if (codigo) {
-                const departamento = new Departamento(codigo);
-                departamento.excluir().then(() => {
-                    resposta.status(200).json({
-                        "status": true,
-                        "mensagem": "Departamento excluído com sucesso!"
-                    });
-                }).catch((erro) => {
-                    resposta.status(500).json({
-                        "status": false,
-                        "mensagem": "Erro ao excluir o departamento: " + erro.message
-                    });
-                });
-            } else {
-                resposta.status(400).json({
-                    "status": false,
-                    "mensagem": "Por favor, informe o código do departamento!"
-                });
-            }
-        } else {
-            resposta.status(400).json({
-                "status": false,
-                "mensagem": "Por favor, utilize o método DELETE para excluir um departamento!"
+        const codigo = requisicao.params.codigo; 
+        if (codigo) {
+          const departamento = new Departamento(codigo);
+          departamento.excluir().then(() => {
+            resposta.status(200).json({
+              status: true,
+              mensagem: 'Departamento excluído com sucesso!',
             });
+          }).catch((erro) => {
+            resposta.status(500).json({
+              status: false,
+              mensagem: 'Erro ao excluir o departamento: ' + erro.message,
+            });
+          });
+        } else {
+          resposta.status(400).json({
+            status: false,
+            mensagem: 'Por favor, informe o código do departamento!',
+          });
         }
-    }
-
+      }
     
     consultar(requisicao, resposta) {
         resposta.type('application/json');
